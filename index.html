@@ -1,0 +1,1074 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Formation React Redux 2022</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Formation React</h1>
+					<img data-src="img/logo-react.png"/>					
+				</section>
+
+				<section>
+					<section data-markdown># Présentation de React et des outils</section>
+					<section data-markdown>
+						## Un peu d'histoire
+						* bibliothèque JavaScript pour créer des interfaces graphiques
+						* créée par Facebook en 2013
+						* belle popularité depuis : AirBnB, Netflix, Uber ... comme utilisateurs
+						* utilisée dans la filière JavaScript à l'Insee depuis 2018
+					</section>
+					<section >
+						Architecture d'une application React
+						<p class="stretch">
+							<img data-src="img/schema-appli-js.png"/>
+						</p>
+					</section>
+					<section data-markdown>
+						## Outils pour le développement (1/2)
+						* Visual Studio Code (VS Code) : IDE JavaScript. Quelques extensions :
+							* Auto Import
+							* ESLint
+							* GitLens — Git supercharged
+							* Prettier - Code formatter
+							* Eclipse Keymap, Git History
+						* Téléchargement VSCode : https://code.visualstudio.com/docs/?dv=winzip
+					</section>
+					<section data-markdown>
+						## Outils pour le développement (1/2)
+						* Node.js : environnement d'exécution JavaScript. Utilisé pour lancer en local un serveur Web, 
+						parser et déployer le code JS
+							* https://nodejs.org/dist/v16.14.0/node-v16.14.0-win-x64.zip
+						* **npm** : gestionnaire de packages JavaScript. Inclus avec l'installation de Node.js
+						* Firefox ou Chrome : installer les extensions React Developer Tools et Redux DevTools
+					</section>
+					<section data-markdown>
+						## Dépôts et backend
+						* le code source du backend est diponible ici : https://github.com/slide2009/formation-react-back.git
+						* importer dans Eclipse 
+						* ouvrir le fichier application.properties sous ressources
+						* changer le schéma comme indiqué
+						* lancer l'application : clic droit sur FormationReactBackApplication puis
+							* Runas -> Java Application
+							* ou bien Runas -> Spring Boot App 
+							* ou bien le lancer dans le Boot Dashboard
+						* dépôt des bouts de code https://github.com/slide2009/formation-react-exo.git
+					</section>
+					<section data-markdown>
+						## Initialiser une application React
+						Exécuter dans la console VS Code :
+						<pre>
+							<code data-trim data-noescape>
+								npx create-react-app suivi-applications
+							</code>
+						</pre>
+						Ce code va créer une arborescence de dossiers et des fichiers :
+						* le dossier **src** : dossier qui va contenir le code source JavaScript
+						* le fichier **package.json** :
+							* liste des dépendances du projet (packages JavaScript qu'on utilise)
+							* les scripts prédéfinis : start, build ...
+					</section>
+					<section data-markdown>
+						## Lancement de l'application						
+						Exécuter dans la console VS Code :
+						<pre>
+							<code data-trim data-noescape>
+							cd suivi-applications
+							npm start
+							</code>
+						</pre>
+						Examen des fichiers **src/App.js**, **src/index.js** et **public/index.html**
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							### Eléments de JavaScript ES6
+							**Arrow function :**
+```javascript
+const maFonction = arg => {
+	console.log(arg)
+	return `Saisie : ${arg}`
+}							
+
+// Avec plusieurs arguments :
+const maAutreFonction = (arg0 = "Bonjour", arg1) => {
+	console.log(arg0 + " " + arg1)
+	return `Saisie : ${arg0}, ${arg1}`
+}					
+```		
+						</textarea>
+
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+						###	Objet et décomposition (destructuring)  :
+						```javascript 
+const monObjet = { a: 1,
+                   b: { clef1 : "valeur1", 
+                        clef2 : "valeur2"}
+                 }
+
+// créer une nouvelle variable nommée a qui vaut 1
+const {a} = monObjet 
+// créer une nouvelle variable nommée x qui vaut 1
+const {a: x} = monObjet 
+
+// créer une nouvelle variable nommée clef2 qui vaut "valeur2"
+const {b: { clef2 }} = monObjet
+// créer une nouvelle variable nommée y qui vaut "valeur2"
+const {b: { clef2: y }} = monObjet
+```
+						</textarea>
+					</section>
+					<section>
+						Destructuring d'arguments d'une fonction
+						<pre><code data-trim>
+							// maFonction prend un objet en entrée
+							// de cet objet elle ne garde que la propriété nommée a
+							const maFonction = ({a}) => {
+								console.log(a)
+							}
+							
+							const monObjet = { a: 1,
+									   b: "valeur1"
+							}
+							// affiche 1				 
+							maFonction(monObjet)
+						</code></pre>						
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							### Les opérations sur les tableaux :							
+							- concat, includes, join
+							- forEach, filter, map
+							- slice
+
+```javascript
+const monTableau = [1, "valeur1", { a: 1, b: 2 }]
+
+// créer tableau2 résultat de la concaténation
+const tableau2 = monTableau.concat([2, 3, 4]);
+monTableau.includes("valeur1"); // retourne true
+// afficher chaque élément
+monTableau.forEach(element => console.log(element)); 
+
+// Créer un nouveau tableau qui contient que les valeurs non-objet, 
+// chaque élément de ce nouveau tableau sera préfixé par "Contenu : "
+const tableau3 = monTableau
+				 //filtrer
+                 .filter(element => typeof element !== 'object') 
+				 // transformer chaque élément
+                 .map(element => `Contenu : ${element}`); 
+
+// un extrait de mon tableau à partir de l'indice 1
+tableau4 = monTableau.slice(1);
+```
+						</textarea>
+					</section>
+					<section>
+						Décomposition (spread operator ...)
+						<pre>
+							<code data-trim data-noescape>
+								const monObjet = {a: 1, b: 2};
+								// mis à plat de monObjet et l'affecter à l'objet2 (clonage de monObjet)
+								const objet2 = {...monObjet}; 
+								
+								const monTableau = [1, 2, 3];
+								// a vaut 1, b vaut 2
+								const [a, b] = monTableau; 
+								// clonage d'un tableau
+								const tableau2 = [...monTableau];
+								// les arguments restants d'une fonction
+								const MaFonction = (arg1, ...args) =>  console.log(args);
+								// afficher le tableau [2, 'toto']
+								MaFonction(1, 2, 'toto'); 		
+							</code>
+						</pre>
+					</section>
+
+					<section data-markdown>
+						## Modules, import et export
+						* modules : ensemble de programmes JavaScript
+						* import : réutiliser un élément d'un module
+						* export : mettre mon composant à disposition des autres composants ou programmes JavaScript
+					</section>
+				</section>
+
+				<section>
+					<section data-markdown>
+						# Principes de React
+					</section>
+					<section data-markdown>
+						## React et Virtual DOM
+* le DOM : "l'arbre qui représente la page HTML"
+* React crée un objet JavaScript à l'image du vrai DOM : le Virtual DOM
+* les opérations sur le Virtual DOM sont très rapides
+* les modifications de l'utilisateur sont d'abord appliquées au Vitual DOM
+* React applique ensuite les modifications sur le vrai DOM de manière optimisée
+					</section>
+					<section>
+						<p class="stretch">
+							<img data-src="img/react-virtual-dom.png"/>
+						</p>
+					</section>
+					<section data-markdown>
+						## Composant React
+						* composant :  unité responsable du rendu d'un élément de l'interface graphique (exemple de décomposition d'un écran)
+						* un composant peut recevoir des données via ses **props**
+						* un composant peut avoir un état : son **state**
+						* ce qui est retourné par le composant est le rendu / l'affichage à l'écran
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+								### Composant React
+								Syntaxe : on va privilégier l'écriture des composants sous la forme fonctionnelle (et hooks) dans cette formation
+
+```javascript
+const MonComposant = () => {
+	return <div>Bonjour</div>
+};
+
+// Ou plus court :
+const MonComposant = () =>  <div>Bonjour</div>
+
+// exporté pour être utilisable par d'autres composants
+export default MonComposant;
+```
+						</textarea>
+					</section>
+					<section >
+						<p data-markdown>
+						## Props
+						* objet transmis à un composant
+						* lecture seule
+						</p>
+						<pre><code data-trim=""><script type="text/template">
+							// MonComposant reçoit un objet props qui contient des valeurs
+							const MonComposant = props => <div>Bonjour {props.nom}</div>
+
+							// Déstructuration
+							const MonComposant = ({nom}) => <div>Bonjour {nom}</div>
+
+							// Dans le parent du composant :
+							<MonComposant nom="Toto"/>
+						</script></code></pre>
+					</section>
+
+					<section>
+						<p data-markdown>
+						## State
+						* état local du composant
+						* initialisé avec **useState** : const [monEtat, setMonEtat] = useState('Valeur initiale')
+						* la mise à jour doit être faite avec le setMonEtat fourni par useState : 
+						</p>
+						<pre><code data-trim="">
+							// Affecter une nouvelle valeur :
+							setMonEtat('Nouvelle valeur')
+							
+							// Modifier l'ancienne valeur
+							setMonEtat(etat => etat + " modifiée")
+						</code></pre>
+					</section>
+
+					<section>						
+						<pre><code>
+							<script type="text/template">
+import React, { useState } from 'react' 
+			
+const MonComposant = () => {
+	// MonComposant a un état local nom, initialisé avec la valeur 'Toto' :
+	const [nom, setNom] = useState('Toto')
+	
+	return <div>      
+		{/* Mise à jour de nom avec le setter */}						
+		<label>
+			Nom : <input type="text" onChange= { e => setNom(e.target.value)} /> 
+		</label>
+		<div>{nom}</div>      
+	</div>
+}
+							</script>
+						</code>
+						</pre>
+					</section>
+
+					<section data-markdown>
+						## Le rendu
+						Le résultat renvoyé par le composant est du JSX (JavaScript XML) :
+						* doit être une balise XML valide
+						* les expressions à évaluer sont à mettre entre accolades : {nom}, {props.nom} 
+						* on peut utiliser les balises HTML classiques (div, form, input ...) et leurs attributs (label, name, onChange, onSelect, onClick ...)
+						* les commentaires : {/* mon commentaire */}
+					</section>
+					<section data-markdown>
+						## Le rendu
+						* **à chaque fois que le state ou les props changent, React met à jour l'affichage**
+						* l'interactivité se base sur ce fonctionnement
+					</section>
+					<section>
+						<h2>Utilisation du composant</h2>
+						<pre><code data-trim=""><script type="text/template">
+						import React, { useState } from 'react' 
+						import MonComposant from './MonComposant';
+									
+						const App = () =>  {
+							return <div className="App">      
+								Gestion des applications
+								<MonComposant/>
+							</div>
+						}								
+						</script></code></pre>
+					</section>
+					<section data-markdown="">
+						Les événements dans React
+						* rappels sur le DOM
+						* différences mineures dans React
+							* camel case
+							* synthétiques
+						* https://reactjs.org/docs/events.html
+					</section>
+					<section data-markdown="">
+						Exemples :
+						* réutilisation d'un composant
+						* composant enfant d'un composant, lui-même enfant d'un composant
+						* state ou props changent => changement du rendu
+						* props.children
+					</section>					
+				</section>
+
+				<section>
+					<section data-markdown>
+						## Exercice
+						Créer un formulaire pour saisir la description d'une application
+						* un champ input de type texte pour saisir le nom de l'application (balise input)
+						* un champ input de type texte pour saisir la version de l'application (balise input)
+						* un menu déroulant (balise select) pour choisir l'état de l'application. Deux valeurs possibles : **ACTIVE** et **OBSOLETE**
+						* un bouton Enregistrer (balise button type="button") qui lorsqu'on clique dessus affiche dans la console du navigateur les valeurs saisies
+						* le composant renvoie une balise form contenant ces balises de saisie
+					</section>
+					<section>
+						Suggestions
+						<pre><code data-trim=""><script type="text/template">
+							const [etat, setEtat] =  useState('');
+							...
+							<label>
+								Etat de l'application <select value={etat} onChange={e => setEtat(e.target.value)}>
+										<option value="ACTIVE">Active</option>
+										<option value="OBSOLETE">Obsolète</option>
+									</select>
+								</label>
+							...
+							<button type="button" onClick={e => console.log(`${nom} ${version} ${etat}`  )}>Enregistrer</button>
+						</script></code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section data-markdown>
+						## Flux entre composants
+						* un composant transmet les données à un composant enfant via les props de celui-ci
+						* pour modifier l'état du parent par l'enfant, on doit passer un "setter" défini dans le parent à l'enfant pour qu'il l'exécute
+					</section>
+					<section data-markdown>
+						Exemple :
+						* dans App on a un compteur du nombre de fois qu'on a cliqué sur le bouton Enregistrer
+						* on souhaite afficher et modifier ce comptage dans le formulaire
+					</section>
+					<section data-markdown="">
+						## Divers
+						* Class vs composant fonctionnel (et hooks) :
+							* il existe une autre façon d'écrire les composants : les classes
+							* https://reactjs.org/docs/hooks-faq.html#should-i-use-hooks-classes-or-a-mix-of-both
+							* une classe se transforme facilement en hooks
+						* list et keys				
+					</section>
+				</section>
+
+				<section>
+					<section data-markdown>
+						# Communication avec le back-end
+					</section>
+					<section data-markdown>
+						## API du back-end
+						* POST http://localhost:8080/applications avec comme body {nom: .., version : ..., etat: ...}. 
+						Si il existe une application de même nom elle est mise à jour.
+						* GET http://localhost:8080/applications liste de toutes les applications
+						* DELETE http://localhost:8080/applications/id id qui est l'identifiant de l'application
+					</section>
+					<section data-markdown>
+						## Fetch
+						<pre>
+							<code>
+		const headers = new Headers();
+		headers.append("Content-Type" , "application/json")
+		fetch("http://localhost:8080/applications",
+			{
+				method: 'POST',
+				headers: headers,
+				body: JSON.stringify({nom: nom, version: version, etat: etat})
+			})
+		.then(reponse => console.log(reponse))
+		.catch(e => console.log(e))
+							</code>
+						</pre>
+						Utliser ce code dans la méthode "enregistrer" du formulaire
+					</section>
+					<section data-markdown="">
+						### Syntaxe de fetch
+						* fetch(url, {method, headers, body})
+						* method : GET, POST, DELETE, PUT, PATCH, OPTIONS
+						* headers : format des données envoyées/reçues, mise en cache, authentification
+						* body : en cas de POST, PATCH ou PUT
+					</section>
+					<section data-markdown>
+						## Charger les données avec useEffect
+						* les effets : tout ce qui est hors du domaine de la fonction qui est en train de s'exécuter 
+						* c'est le cas de l'appel à l'API
+						* syntaxe : useEffect (callback , condition) avec
+							* callback notre fonction qui appelle l'API
+							* condition : 
+								* absent : le callback est appelé à chaque rendu 
+								* [] : une seule fois après le premier rendu
+								* [var1, var2] : si var1 ou var2, qui peuvent être des props ou state, changent alors le callback est réexécuté
+					</section>
+					<section>
+						Un composant qui est un tableau de toutes les applications
+						<pre>
+							<code data-trim="">
+								<script type="text/template">
+								const Tableau = () => {								
+									const [data, setData] = useState([])    
+
+									useEffect(()=> {
+										const headers = new Headers();
+										headers.append("Content-Type" , "application/json")
+										fetch("http://localhost:8080/applications", {headers: headers})
+										.then(reponse => reponse.json())
+										.then(reponse => setData(reponse))
+										.catch(e => console.log(e))
+									}, [])
+
+									return data.length > 0 ? <table>
+										<thead>
+											<tr>
+												<th>Id</th>
+												<th>Nom</th>
+												<th>Version</th>
+												<th>Etat</th>
+											</tr>
+										</thead>
+										<tbody>
+										{
+										
+										}
+										</tbody>
+									</table>
+									:<></>
+								}
+								</script>
+							</code>
+						</pre>
+
+					</section>
+					<section>
+						<p data-markdown>
+						## Exercice
+						* faire le corps du tableau 
+						* vous pouvez appliquer la méthode map à data 
+						* utiliser ce tableau dans App.js
+						</p>						
+<pre>
+	<code>
+		<script type="text/template">
+		// dans le body du tableau
+		data.map(appli => <tr> <td> {appli etc...}</td></tr>)
+
+		// puis dans App :
+		import Tableau from ... ; ... <Tableau/>
+		</script>
+	</code>
+</pre>							
+					</section>
+					<section data-markdown>
+					## Exercice	
+					* pour chaque ligne ajouter une dernière colonne contenant un bouton "Supprimer"
+					* lorsqu'on clique sur ce bouton :
+						* supprimer l'application correspondante
+						* recharger le tableau 
+					* suggestions :
+						* pour supprimer utiliser un fetch avec DELETE comme méthode sur l'URL http://localhost:8080/applications/id
+						* chaîner le rechargement des données en cas de succès du fetch
+					</section>
+				</section>
+
+				<section>
+					<section><h1>React Router</h1></section>
+					<section>
+						<p data-markdown>
+							* bibliothèque de routage : associe les url aux composants
+							* https://reactrouter.com/docs/en/v6
+							* gros changement dans la version 6 par rapport à la version 5
+							* installation :
+						</p>
+						<pre>
+							<code data-trim="">	
+								npm install react-router-dom@6 history@5
+							</code>
+						</pre>
+					</section>
+					<section>
+						<p data-markdown>
+						## Composants
+						* Router : point d'entrée à wrapper autour de App. On choisit HashRouter pour ne pas avoir à configurer le serveur de prod.
+						* Dans index.js :
+						</p>
+						<pre><code data-trim=""><script type="text/template">
+						import {HashRouter} from 'react-router-dom'
+
+						ReactDOM.render(
+							<React.StrictMode>
+								<HashRouter>
+									<App/>
+								</HashRouter>
+							</React.StrictMode>,
+							document.getElementById('root')
+						);
+						</script></code></pre>
+					</section>
+
+					<section>
+						<p data-markdown>
+						## Composants : Routes et Route 
+						* le composant Routes a des enfants Route
+						* Route associe une url à un composant
+						* le client demande une url => Routes cherche dans ses enfants un Route qui matche et renvoie le composant associé
+						</p>
+					</section>
+
+					<section>
+						Dans App.js :						
+						<pre><code data-trim=""><script type="text/template">
+							import {Routes, Route} from 'react-router-dom'
+							const App = () => {
+								return (
+								  <div className="App">
+									<Routes>
+										<Route path="tableau" element={<Tableau/>}/>
+										<Route path="formulaire" element={<Formulaire/>}/>
+									</Routes>
+								  </div>
+								);
+							  }
+						</script></code></pre>
+					</section>
+					<section data-markdown="">
+						## Route
+						* l'attribut path : l'url gérée par cette route
+						* l'attribut element : le composant à afficher quand l'url est matché par path
+						* on accède aux pages via les URL :
+							* http://localhost:3000/#/formulaire
+							* http://localhost:3000/#/tableau
+					</section>
+
+					<section>
+						<p data-markdown="">
+							Les hooks de React Router:
+							* useNavigate : naviguer vers une URL
+							* useParams : utiliser une portion de l'URL commme variable et accéder à cette variable
+						</p>
+						<pre><code data-trim=""><script type="text/template">
+						...
+						<Route path="formulaire" element={<Formulaire/>}/>
+						...
+
+						import { useNavigate } from "react-router-dom";
+						const Tableau = () => {
+							const navigate = useNavigate();
+							...
+							<button onClick={() => navigate('/formulaire')} >Créer une application</button>
+							...
+						}
+						</script></code></pre>		
+					</section>
+
+					<section>
+						Exemple de useParams
+						<pre><code data-trim=""><script type="text/template">
+							<Route path="formulaire/:idAppli" element={<Formulaire/>}/>
+							...
+							
+							import { useParams } from 'react-router-dom';
+							const {idAppli} = useParams();
+
+						</script></code></pre>		
+					</section>
+					<section>
+						<h2>Composant : Link</h2>						
+						<pre><code data-trim="">	<script type="text/template">
+						import { Link } from 'react-router-dom'
+						<Link to={ 'un path défini dans un composant Route' }>Texte du lien</Link>
+						</script></code></pre>
+						to : sans "leading /" = chemin relatif par rapport au path actuel								
+					</section>
+					<section data-markdown>
+						## Exercice
+						* définir les routes vers le formulaire et le tableau
+						* dans le formulaire ajouter un bouton qui renvoie vers le tableau des applications
+						* à la fin du tableau ajouter un bouton qui renvoie vers le formulaire
+					</section>
+				</section>
+
+				<section>
+					<section><h1>Redux</h1></section>
+					<section>
+						<p data-markdown>
+							## Besoins
+							* accès/modification des données par un composant quelque soit sa position dans l'arborescence
+							* "mise en cache" des données d'une page
+						</p>
+						<p class="stretch">
+							<img data-src="img/redux-flow.jpg"/>
+						</p>
+					</section>
+					<section data-markdown>
+						## Composants de Redux (1/2)
+						* **store** : objet contenant les données accessibles à tous les composants et quelques méthodes
+						* **action** : message pouvant modifier le store. Contient les données à mettre dans le store (payload)
+						* **reducer** : fonction prenant le store et une action en entrée et retourne un store modifié 
+					</section>
+
+					<section data-markdown>
+						## Composants de Redux (1/2)
+						* **mapStateToProps** : fonction définie par l'utilisateur pour injecter les données du store dans un composant
+						* **mapDispatchToProps** : fonction définie par l'utilisateur pour modifier les données du store par un composant
+						* **connect** : fonction qui connecte **mapStateToProps** et/ou **mapDispatchToProps** à un composant
+					</section>
+					
+					<section>
+						<img data-src="img/redux-state-update.png"/>
+					</section>
+					
+					<section>
+						<h2>Mise en place</h2>
+						<pre>
+							<code data-trim="">
+							npm install react-redux @reduxjs/toolkit
+							</code>
+						</pre>
+					</section>
+					<section>
+						<p data-markdown>						
+						## Exemple
+						On souhaite mettre dans le store le nombre de fois qu'on a cliqué sur "Enregistrer" dans un formulaire. 
+						Ce compteur sera réaffiché dans le composant Tableau.
+						1. créer l'action dans un fichier nommé actions.js
+						</p>
+						<pre><code data-trim="">
+export const MODIFIER_COMPTEUR = "MODIFIER_COMPTEUR"
+export const modifierCompteur = payload => ({type : MODIFIER_COMPTEUR, payload })
+						</code></pre>
+					</section>
+					<section>
+						<p  data-markdown="">
+							2. créer le reducer dans un fichier nommé reducer.js
+						</p>
+						<pre><code data-trim="">
+	export const applicationReducer = (state = 0, action) => {
+		if(action.type === MODIFIER_COMPTEUR) {
+			return state + action.payload
+		}
+		return state;
+	}
+						</code></pre>
+					</section>
+
+					<section>
+						<p data-markdown="">
+							3. connecter le reducer au store  
+							Dans index.js
+						</p>
+						<pre><code><script type="text/template">
+// Ajouter ces imports en plus
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
+import { applicationReducer } from './component/reducer'
+const store = createStore(applicationReducer)
+
+ReactDOM.render(
+<React.StrictMode>
+	<Provider store={store}>
+		<HashRouter>
+			<App />
+		</HashRouter>
+	</Provider>
+</React.StrictMode>,
+document.getElementById('root')
+)
+					</script></code></pre>
+					</section>
+					<section>
+						<p data-markdown="">
+							4. permettre au composant Formulaire de modifier le store(mapDispatchToProps)  
+							Créer un fichier FormulaireContainer.js
+						</p>
+						<pre><code>
+
+import { connect } from 'react-redux'
+import { modifierCompteur } from "./action"
+import Formulaire from './Formulaire'
+
+const mapDispatchToProps = dispatch => ({
+	ajouter : valeur => dispatch(modifierCompteur(valeur)) 
+})
+
+export default connect(null, mapDispatchToProps)(Formulaire)
+
+						</code></pre>
+						</section>
+						<section>
+						Utiliser ce composant connecté dans App.js
+						<pre><code><script type="text/template">
+import FormulaireContainer from './component/application/FormulaireContainer'
+.....
+<Route path="/formulaire" element={<FormulaireContainer/>}/>
+						</script></code></pre>
+
+					</section>
+
+					<section>
+						<p data-markdown>5. Modifier Formulaire pour pouvoir appeler la fonction injectée.  Dans Formulaire</p>
+						<pre><code>
+// On utilise la fonction injectée :
+const Formulaire = ({ajouter}) => { .... 
+// Dans la méthode qui enregistre :
+ajouter(1)
+						</code></pre>
+					</section>
+
+					<section>
+						<p data-markdown> 6. Afficher le state dans le composant Tableau (mapStateToProps)  </p>
+Créer un TableauContainer.js
+<pre><code><script type="text/template">
+import { connect } from 'react-redux'
+import Tableau from './Tableau'
+const mapStateToProps = state => ({ compteur : state})
+export default connect(mapStateToProps)(Tableau)
+</script></code></pre>
+Et utiliser ce composant connecté à la place de Tableau
+<pre><code><script type="text/template">
+import TableauContainer from './component/application/TableauContainer'
+<Route path="/tableau" element={<TableauContainer/>}/>
+</script></code></pre>
+					</section>
+					<section>
+Enfin modifier Tableau pour prendre en compte le compteur injecté
+<pre><code><script type="text/template">
+const Tableau = ({compteur}) => {	
+	....
+<div>Il y a eu {compteur} enregistrements</div>
+</script></code></pre>
+					</section>
+
+					<section>
+						<p data-markdown="">
+							On souhaite donner une structure d'objet au state
+							1. Modifier le fichier reducer.js 				
+						</p>
+						<pre><code data-trim=""><script type="text/template">
+						export const applicationReducer = (state = {compteur : 0}, action) => {
+							if(action.type === MODIFIER_COMPTEUR) {
+								return {
+									...state, // les autres champs du state sont renvoyés inchangés
+									compteur : action.payload // on modifie le champ nommé 'compteur' de state
+								}
+							}
+							return state;
+						}							
+						</script></code></pre>
+					</section>
+
+					<section>
+						2. Modifier le fichier TableauContainer.js
+						<pre><code data-trim=""><script type="text/template">
+						import { connect } from 'react-redux'
+						import Tableau from './Tableau'
+						// on prend state.compteur pour injecter dans le Tableau
+						const mapStateToProps = state => ({ compteur : state.compteur})
+						export default connect(mapStateToProps)(Tableau)
+						</script></code></pre>						
+					</section>
+
+					<section >
+						<p data-markdown="">
+		## Exercice
+		* installer le plugin Redux DevTools pour visualiser le store :
+			* le plugin Firefox : Redux DevTools
+			* dans index.js :
+						</p>
+						<pre><code data-trim=""><script type="text/template">
+import { compose, createStore } from 'redux';
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(applicationReducer, composeEnhancers())
+
+						</script></code></pre>
+		<p data-markdown="">
+		* mettre dans le store le nom de la dernière application que vous avez enregistrée
+		* réafficher ce nom dans un composant de votre choix			
+		</p>
+					</section>
+				</section>
+
+				<section>
+					<section><h1>Material UI</h1></section>
+					<section>
+						Bibliothèque de composants React
+						<p data-markdown>
+						* suit les principes Material Design
+						* https://mui.com/
+						* la dernière version v5 est sortie en septembre 2021
+						* Doc : https://mui.com/getting-started/usage/
+						</p>
+						<pre><code data-trim=""><script type="text/template">
+							npm install @mui/material @emotion/react @emotion/styled
+						</script></code></pre>												
+					</section>
+					<section>
+						Ajouter ce lien dans le fichier <b>public/index.html</b> pour les fonts : 
+						<pre><code data-trim=""><script type="text/template">
+						<link rel="stylesheet"
+						href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+						</script></code></pre>												
+					</section>
+
+					<section data-markdown="">
+					Composants :
+					* système de grille avec le composant _Grid_
+						* conteneur avec 12 colonnes par défaut
+						* alignement, redimensionnement et espacement automatiques et paramétrables
+					* composants de formulaire : _Input_, _Select_, _Button_
+					* composants de rendu de surfaces : _Card_, _Paper_
+					</section>
+
+					<section data-markdown="">
+						## Exercice 
+						Utiliser Material UI sur le formulaire. Les indications suivantes sont facultatives ...
+						* utiliser _Grid_ pour mettre 1 input par ligne
+						* utiliser _TextField_ pour les inputs
+						* utiliser _Select_ et _MenuItem_ pour le menu déroulant
+					</section>
+				</section>
+                
+				<section>
+					<section><h1>MUI-Datatables</h1></section>
+					<section data-markdown="">
+						* bibliothèque de gestion de tableaux
+						* le rendu est basé sur Material UI
+						* https://github.com/gregnb/mui-datatables
+					</section>
+					<section data-markdown="">
+						* installation : `npm install mui-datatables`
+						* dépend de @mui/material et @mui/icons-material
+						* filtre, tri, pagination, affichage personnalisé
+					</section>
+					<section>
+						Exemple
+						<pre><code data-trim=""><script type="text/template">
+							import MUIDataTable from "mui-datatables"
+
+							const data = [ ]; // tableau d'objets
+							const colonnes = [
+							{
+								name: 'nomVariable',
+								label: 'Titre de la colonne dans le tableau',
+								options: { // options pour cette colonne : display, customBodyRender ...
+
+								}
+							},
+							]
+							// options pour le tableau : onRowClick, searchOpen ...
+							const options = { }
+							
+							return <MUIDataTable data={data} columns={colonnes} options={options} title="Titre du tableau" />
+						</script></code></pre>
+					</section>
+					<section data-markdown="">
+						## Exercice
+						Utiliser MUI-Datatables pour afficher le tableau des applications.  
+						Indications :
+						* utiliser l'option **enableNestedDataAccess: '.'** au niveau du tableau pour afficher les champs de l'objet renvoyé par l'API
+						* utiliser l'option **customBodyRender** au niveau de la colonne pour afficher le bouton supprimer
+					</section>
+				</section>
+
+                <section>
+					<section><h1>Formik</h1></section>
+					<section data-markdown="">
+						* bibliothèque de gestion de formulaire
+						* https://formik.org/
+						* installation : `npm install formik`
+					</section>
+					<section>
+						Initialisation 
+						<pre><code data-trim=""><script type="text/template">
+                        import { useFormik } from 'formik'
+                        const formik = useFormik({
+                            initialValues: { champ1: val1, champ2: val2} , //valeurs initiales du formulaire
+                            onSubmit: values => {
+                                // traitement du submit. values contient les données saisies
+                            }
+                        })
+						</script></code></pre>
+					</section>
+					<section>
+						Utilisation
+						<pre><code><script type="text/template">
+<form onSubmit={formik.handleSubmit}> // formik est l'objet précédemment instancié avec useFormik
+...
+// les champs de saisie
+<TextField {...formik.getFieldProps('champ1')} label="" etc... />
+<TextField {...formik.getFieldProps('champ2')} label="" etc... />
+
+// Faire un submit standard du form, formik va appeler le traitement déclaré dans onSubmit
+						</script></code></pre>
+					</section>
+					<section>
+						<p data-markdown="">
+							## Validation du formulaire
+							* déclarer un fonction validate qui va faire le travail de validation
+							* activer la validation dans les options 
+							* l'objet formik qu'on a injecté dans le formulaire va contenir un objet **errors**
+						</p>
+						</section>
+						<section data-markdown="">
+						<textarea data-template>
+```javascript
+const validate = values => {
+	const errors = {};
+	if ( .... ) { //conditions sur les champs ici
+		errors.champ1 = "Message d'erreur"
+    }
+    return errors;
+}
+....
+
+const formik = useFormik({
+....
+validate,
+.....
+})
+```
+						</textarea>
+					</section>
+
+					<section data-markdown="">
+						## Exercice
+						* utiliser formik dans le formulaire de saisie d'une application
+						* rendre obligatoire l'état
+						* le nom doit avoir une longueur minimale de 2
+						* afficher un message en cas d'erreur de non respect de la saisie
+						* Suggestions :
+							* placer l'appel ajax qui enregistre dans le onSubmit
+							* utiliser une fonction validate pour valider
+							* utiliser les attributs error={formik.errors.nomDuChamp} et helperText={formik.errors.nomDuChamp} des composants Material UI
+					</section>
+				</section>
+
+				<section>
+					<section data-markdown="">
+						## Tests
+						* Testing library : inclus par défaut avec "create-react-app"
+						* documentation : https://testing-library.com/docs/react-testing-library/intro
+						* on teste le rendu d'un composant
+					</section>
+					<section>
+						Exemple du fichier Formulaire.test.js
+						<pre><code data-trim=""><script type="text/template">
+							import { render, screen } from '@testing-library/react';
+							import Formulaire from '../components/Formulaire';
+							// mocker le composant Link inclus dans Formulaire
+							jest.mock('react-router-dom', () => ({
+								Link: 'div',
+							}))
+  
+							describe('Tests des composants du domaine ', () => {
+								test('Affichage du formulaire', () => {
+									render(<Formulaire/>)
+									expect(screen.getByText("Etat de l'applications"))
+									.toBeInTheDocument();
+								})
+							})
+						</script></code></pre>
+					</section>
+					<section data-markdown="">
+						Syntaxe 
+						* describe : suite de tests
+						* test : un test 
+						* render : affichage du composant
+						* jest.mock : on mocke le Link de React Router
+
+						On exécute avec : 
+						* npm test
+						* npm test -- nomFichier.test.js
+					</section>
+					<section data-markdown="">
+						Sélection d'éléments :
+						* getByText
+						* getByDisplayValue 
+						* findBy : élément résultat d'un appel ajax
+					</section>
+					<section data-markdown="">
+						Expectations
+						* toBeInTheDocument
+						* toHaveDisplayValue
+						* toBeEmpty
+					</section>
+				</section>
+					
+				<section data-markdown="">
+					## Création de livrable
+					* commande : `npm run build`
+					* le dossier build produit contient toute l'application à déployer
+				</section>
+
+				<section data-markdown>
+					# Liens divers
+					* Documentation officielle : https://reactjs.org/docs/getting-started.html
+					* La doc JS de la fondation Mozilla https://developer.mozilla.org.
+					* Note sur la filière JavaScript à l'Insee : http://gecodoc-entrepot.insee.fr/xmlui/handle/123456789/44234
+					* Bonne introduction aux composants fonctionnels : https://www.robinwieruch.de/react-function-component
+					* Tuto Redux très bien fait : https://www.valentinog.com/blog/redux/
+				</section>					
+
+			</div>
+		</div>
+
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				width: '100%',
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
