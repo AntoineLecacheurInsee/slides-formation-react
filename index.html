@@ -225,7 +225,7 @@ tableau4 = monTableau.slice(1);
 					<section data-markdown>
 						## Composant React
 						* composant :  unité responsable du rendu d'un élément de l'interface graphique (exemple de décomposition d'un écran)
-						* un composant peut recevoir des données via ses **props**
+						* un composant peut recevoir des informations via ses **props**
 						* un composant peut avoir un état : son **state**
 						* ce qui est retourné par le composant est le rendu / l'affichage à l'écran
 					</section>
@@ -307,9 +307,9 @@ const MonComposant = () => {
 						## Le rendu
 						Le résultat renvoyé par le composant est du JSX (JavaScript XML) :
 						* doit être une balise XML valide
-						* les expressions à évaluer sont à mettre entre accolades : {nom}, {props.nom} 
+						* les expressions à évaluer sont à mettre entre accolades : `{nom}`, {props.nom} 
 						* on peut utiliser les balises HTML classiques (div, form, input ...) et leurs attributs (label, name, onChange, onSelect, onClick ...)
-						* les commentaires : {/* mon commentaire */}
+						* les commentaires : `{/* mon commentaire */}`
 					</section>
 					<section data-markdown>
 						## Le rendu
