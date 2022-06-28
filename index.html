@@ -47,7 +47,7 @@
 						* Téléchargement VSCode : https://code.visualstudio.com/docs/?dv=winzip
 					</section>
 					<section data-markdown>
-						## Outils pour le développement (1/2)
+						## Outils pour le développement (2/2)
 						* Node.js : environnement d'exécution JavaScript. Utilisé pour lancer en local un serveur Web, 
 						parser et déployer le code JS
 							* https://nodejs.org/dist/v16.14.0/node-v16.14.0-win-x64.zip
@@ -56,7 +56,7 @@
 					</section>
 					<section data-markdown>
 						## Dépôts et backend
-						* le code source du backend est diponible ici : https://github.com/slide2009/formation-react-back.git
+						* le code source du backend est diponible ici : https://github.com/AntoineLecacheurInsee/formation-react-back.git
 						* importer dans Eclipse 
 						* ouvrir le fichier application.properties sous ressources
 						* changer le schéma comme indiqué
@@ -64,7 +64,7 @@
 							* Runas -> Java Application
 							* ou bien Runas -> Spring Boot App 
 							* ou bien le lancer dans le Boot Dashboard
-						* dépôt des bouts de code https://github.com/slide2009/formation-react-exo.git
+						* dépôt des bouts de code https://github.com/AntoineLecacheurInsee/formation-react-exo
 					</section>
 					<section data-markdown>
 						## Initialiser une application React
@@ -94,6 +94,9 @@
 					<section data-markdown>
 						<textarea data-template>
 							### Eléments de JavaScript ES6
+
+							[**Lien vers une console JS compatible ES6 en ligne**](https://es6console.com/)
+
 							**Arrow function :**
 ```javascript
 const maFonction = arg => {
@@ -649,7 +652,7 @@ const MonComposant = () => {
 					</section>
 
 					<section data-markdown>
-						## Composants de Redux (1/2)
+						## Composants de Redux (2/2)
 						* **mapStateToProps** : fonction définie par l'utilisateur pour injecter les données du store dans un composant
 						* **mapDispatchToProps** : fonction définie par l'utilisateur pour modifier les données du store par un composant
 						* **connect** : fonction qui connecte **mapStateToProps** et/ou **mapDispatchToProps** à un composant
@@ -663,7 +666,7 @@ const MonComposant = () => {
 						<h2>Mise en place</h2>
 						<pre>
 							<code data-trim="">
-							npm install react-redux @reduxjs/toolkit
+							npm install redux react-redux @reduxjs/toolkit
 							</code>
 						</pre>
 					</section>
@@ -827,6 +830,123 @@ const store = createStore(applicationReducer, composeEnhancers())
 		* réafficher ce nom dans un composant de votre choix			
 		</p>
 					</section>
+
+					<section data-markdown="">
+							### Fonctionnement "moderne" avec Redux Toolkit
+
+							Imports similaires mais plus besoin de redux directement, [lien de la doc pour aller plus loin](https://redux.js.org/introduction/getting-started)
+```
+npm install react-redux @reduxjs/toolkit 
+```
+					</section>
+
+					<section data-markdown="">
+						### Création d'une **Slice** = actions + reducer
+```javascript
+import { createSlice } from '@reduxjs/toolkit'
+
+const initialState = { value: 0 }
+
+export const counterSlice = createSlice({
+    name: 'counter',
+    initialState,
+    reducers: {
+        increment: state => {
+            // Grâce à Redux Toolkit, on peut écrire de la logique "mutative" dans les reducers.
+            // Dans les faits, la bibliothèque Immer est utilisée et gère ces changements pour produire
+            // un nouvel état immuable à partir de ces modifications demandées.
+            state.value += 1
+        },
+        decrement: state => {
+            state.value -= 1
+        },
+        incrementByAmount: (state, action) => {
+            state.value += action.payload
+        },
+        reset: state => { state.value = initialState.value }
+    }
+})
+
+// Les créateurs d'action sont générés à partir de chaque reducer déclaré pour la Slice
+export const { increment, decrement, incrementByAmount, reset } = counterSlice.actions
+
+export default counterSlice.reducer
+```
+					</section>
+
+					<section data-markdown="">
+					### Ajout au store
+
+```javascript
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from "./counterSlice";
+
+export default configureStore({
+  reducer: {
+	// Nom de la slice utilisé pour accéder à cette partie du state dans le store
+    counter: counterReducer
+  }
+});
+```					
+
+					</section>
+
+					<section>
+						<p data-markdown="">
+						### Utilisation des actions dans un composant _Counter_
+					</p>
+	
+					<pre><code data-trim=""><script type="text/template">
+						import React, { useState } from 'react'
+						import { useSelector, useDispatch } from 'react-redux'
+						import { decrement, increment, incrementByAmount, reset } from '../redux/counterSlice';
+						
+						export function Counter() {
+						  // Sélecteur pour récupérer la valeur du counter dans le store redux
+						  const count = useSelector(state => state.counter.value)
+						  // Fonction permettant de dispatcher des actions redux  
+						  const dispatch = useDispatch()
+						
+						  const [amount, setAmount] = useState(0);
+						
+						  return (
+							<div>
+							  <div>
+								<button
+								  aria-label="Increment value"
+								  onClick={() => dispatch(increment())}
+								>
+								  Increment
+								</button>
+								<span>{count}</span>
+								<button
+								  aria-label="Decrement value"
+								  onClick={() => dispatch(decrement())}
+								>
+								  Decrement
+								</button>
+							  </div>
+							  <div>
+								<input type="number" aria-label="Amount to add to counter" 
+										value={amount} onChange={e => setAmount(e.target.valueAsNumber)} />
+								<button
+								  aria-label="Add input value to counter"
+								  // Il suffit de passer la payload "amount" en paramètre de l'action
+								  onClick={() => dispatch(incrementByAmount(amount))}
+								>
+								  Add input value to counter
+								</button>
+							  </div>
+							  <button onClick={() => dispatch(reset())}>
+								Reset counter
+							  </button>
+							</div>
+						  )
+						}
+</script></code></pre>	
+	
+						</section>
+
 				</section>
 
 				<section>
@@ -877,9 +997,10 @@ const store = createStore(applicationReducer, composeEnhancers())
 						* https://github.com/gregnb/mui-datatables
 					</section>
 					<section data-markdown="">
-						* installation : `npm install mui-datatables`
-						* dépend de @mui/material et @mui/icons-material
+						* installation : `npm install mui-datatables --save --legacy-peer-deps`
+						* dépend de @mui/material et @mui/icons-material : `npm install @mui/icons-material`
 						* filtre, tri, pagination, affichage personnalisé
+						* L'instruction `--legacy-peer-deps` permet de gérer un conflit avec la version de React 18
 					</section>
 					<section>
 						Exemple
@@ -907,7 +1028,7 @@ const store = createStore(applicationReducer, composeEnhancers())
 						Utiliser MUI-Datatables pour afficher le tableau des applications.  
 						Indications :
 						* utiliser l'option **enableNestedDataAccess: '.'** au niveau du tableau pour afficher les champs de l'objet renvoyé par l'API
-						* utiliser l'option **customBodyRender** au niveau de la colonne pour afficher le bouton supprimer
+						* utiliser l'option **customBodyRender** au niveau de la colonne pour afficher le bouton supprimer [(exemple de la doc)](https://github.com/gregnb/mui-datatables/blob/master/examples/component/index.js)
 					</section>
 				</section>
 
@@ -945,28 +1066,44 @@ const store = createStore(applicationReducer, composeEnhancers())
 					<section>
 						<p data-markdown="">
 							## Validation du formulaire
+							2 manières de faire [(voir la doc)](https://formik.org/docs/guides/validation):
 							* déclarer un fonction validate qui va faire le travail de validation
-							* activer la validation dans les options 
+							* déclarer un schema de validation avec la librairie [yup](https://github.com/jquense/yup) : `npm install yup`
+
+							Pour les deux méthodes, le résultat est le même :
 							* l'objet formik qu'on a injecté dans le formulaire va contenir un objet **errors**
 						</p>
 						</section>
 						<section data-markdown="">
-						<textarea data-template>
+							<textarea data-template>
+							## Exemple de schéma Yup de validation
 ```javascript
-const validate = values => {
-	const errors = {};
-	if ( .... ) { //conditions sur les champs ici
-		errors.champ1 = "Message d'erreur"
-    }
-    return errors;
-}
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+	// On déclare chaque champ, son type
+	champ1: Yup.string()
+		// Des contraintes supplémentaires et le message en cas d'erreur
+		.min(2, 'Trop court !')
+		.max(50, 'Trop long !')
+		.required('Champ requis'),
+	champ2: Yup.number()
+		.typeError('Champ de type numérique'),
+	email: Yup.string()
+		.email('Email invalide')
+		.required('Champ requis'),
+});
 ....
 
-const formik = useFormik({
+<Formik 
+initialValues={initialValues}
+enableReinitialize
+onSubmit={(values) => enregistrer(values)}
+// Déclaration du schéma Yup utilisé pour la validation
+validationSchema={validationSchema}
+>
 ....
-validate,
-.....
-})
+</Formik>
 ```
 						</textarea>
 					</section>
@@ -975,12 +1112,13 @@ validate,
 						## Exercice
 						* utiliser formik dans le formulaire de saisie d'une application
 						* rendre obligatoire l'état
-						* le nom doit avoir une longueur minimale de 2
+						* le nom doit avoir une longueur minimale de 2 et être obligatoirement renseigné
 						* afficher un message en cas d'erreur de non respect de la saisie
 						* Suggestions :
 							* placer l'appel ajax qui enregistre dans le onSubmit
-							* utiliser une fonction validate pour valider
-							* utiliser les attributs error={formik.errors.nomDuChamp} et helperText={formik.errors.nomDuChamp} des composants Material UI
+							* utiliser un validateSchema pour valider
+							* utiliser les attributs `error={formik.errors.nomDuChamp}` et `helperText={formik.errors.nomDuChamp}` des **TextField** Material UI
+							* pour la gestion des erreurs avec un champ **Select**, utiliser **FormControl** et **FormHelperText**
 					</section>
 				</section>
 
@@ -1004,7 +1142,7 @@ validate,
 							describe('Tests des composants du domaine ', () => {
 								test('Affichage du formulaire', () => {
 									render(<Formulaire/>)
-									expect(screen.getByText("Etat de l'applications"))
+									expect(screen.getByText("Enregistrer"))
 									.toBeInTheDocument();
 								})
 							})
