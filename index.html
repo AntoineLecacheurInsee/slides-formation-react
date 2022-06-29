@@ -50,14 +50,15 @@
 						## Outils pour le développement (2/2)
 						* Node.js : environnement d'exécution JavaScript. Utilisé pour lancer en local un serveur Web, 
 						parser et déployer le code JS
-							* https://nodejs.org/dist/v16.14.0/node-v16.14.0-win-x64.zip
+							* https://nodejs.org/dist/v16.15.1/node-v16.15.1-win-x64.zip
 						* **npm** : gestionnaire de packages JavaScript. Inclus avec l'installation de Node.js
 						* Firefox ou Chrome : installer les extensions React Developer Tools et Redux DevTools
 					</section>
 					<section data-markdown>
 						## Dépôts et backend
 						* le code source du backend est diponible ici : https://github.com/AntoineLecacheurInsee/formation-react-back.git
-						* importer dans Eclipse 
+						* Si vous n'avez pas d'installation Java, vous pourrez utiliser l'application déployée sur le cluster Kubernetes
+						* importer dans Eclipse / IntelliJ
 						* ouvrir le fichier application.properties sous ressources
 						* changer le schéma comme indiqué
 						* lancer l'application : clic droit sur FormationReactBackApplication puis
@@ -404,10 +405,11 @@ const MonComposant = () => {
 					</section>
 					<section data-markdown>
 						## API du back-end
-						* POST http://localhost:8080/applications avec comme body {nom: .., version : ..., etat: ...}. 
+						* Vous pouvez utiliser http://localhost:8080 ou http://formation-react-api.kube.developpement.insee.fr comme BASE_URL
+						* POST {BASE_URL}/applications avec comme body {nom: .., version : ..., etat: ...}. 
 						Si il existe une application de même nom elle est mise à jour.
-						* GET http://localhost:8080/applications liste de toutes les applications
-						* DELETE http://localhost:8080/applications/id id qui est l'identifiant de l'application
+						* GET {BASE_URL}/applications ou liste de toutes les applications
+						* DELETE {BASE_URL}/applications/id id qui est l'identifiant de l'application
 					</section>
 					<section data-markdown>
 						## Fetch
