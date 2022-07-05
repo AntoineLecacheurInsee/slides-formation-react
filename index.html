@@ -896,6 +896,28 @@ export default configureStore({
 					</section>
 
 					<section>
+						<p data-markdown="">### Ajout du store dans l'application</p>
+	
+						<pre><code data-trim=""><script type="text/template">
+import store from './redux/store';
+import { Provider } from 'react-redux';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </Provider>
+  </React.StrictMode>
+);
+</script></code></pre>				
+	
+						</section>
+	
+
+					<section>
 						<p data-markdown="">
 						### Utilisation des actions dans un composant _Counter_
 					</p>
