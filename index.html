@@ -543,13 +543,13 @@ const MonComposant = () => {
 						<pre><code data-trim=""><script type="text/template">
 						import {HashRouter} from 'react-router-dom'
 
-						ReactDOM.render(
+						const root = ReactDOM.createRoot(document.getElementById('root'));
+						root.render(
 							<React.StrictMode>
 								<HashRouter>
 									<App/>
 								</HashRouter>
-							</React.StrictMode>,
-							document.getElementById('root')
+							</React.StrictMode>
 						);
 						</script></code></pre>
 					</section>
@@ -1068,13 +1068,27 @@ root.render(
 					<section>
 						Initialisation 
 						<pre><code data-trim=""><script type="text/template">
-                        import { useFormik } from 'formik'
-                        const formik = useFormik({
-                            initialValues: { champ1: val1, champ2: val2} , //valeurs initiales du formulaire
-                            onSubmit: values => {
-                                // traitement du submit. values contient les données saisies
-                            }
-                        })
+							import { Formik } from 'Formik';
+
+							const initialValues = { 
+								// valeurs initiales
+							}
+
+							export default function FormulaireFormik(){
+							const enregistrer = values => {
+								// fonction d'enregistrement
+							}
+
+							return (
+							<Formik initialValues={initialValues} enableReinitialize onSubmit={(values) => enregistrer(values)}>
+								{formik => (
+									<form onSubmit={formik.handleSubmit}>
+										...
+									</form>
+									)}
+							</Formik>
+							)
+						}
 						</script></code></pre>
 					</section>
 					<section>
@@ -1245,11 +1259,13 @@ describe('Tests du formulaire ', () => {
 
 				<section data-markdown>
 					# Liens divers
-					* Documentation officielle : https://reactjs.org/docs/getting-started.html
-					* La doc JS de la fondation Mozilla https://developer.mozilla.org.
-					* Note sur la filière JavaScript à l'Insee : http://gecodoc-entrepot.insee.fr/xmlui/handle/123456789/44234
-					* Bonne introduction aux composants fonctionnels : https://www.robinwieruch.de/react-function-component
-					* Tuto Redux très bien fait : https://www.valentinog.com/blog/redux/
+					* [Documentation officielle](https://reactjs.org/docs/getting-started.html)
+					* [La doc JS de la fondation Mozilla](https://developer.mozilla.org)
+					* [Note sur la filière JavaScript à l'Insee](http://gecodoc-entrepot.insee.fr/xmlui/handle/123456789/44234)
+					* [Bonne introduction aux composants fonctionnels](https://www.robinwieruch.de/react-function-component)
+					* [Tuto "vieux" Redux très bien fait](https://www.valentinog.com/blog/redux/)
+					* [Un bon récapitulatif des étapes du *cycle de vie* pour les composants sous forme de Classe](https://blog.bitsrc.io/react-16-lifecycle-methods-how-and-when-to-use-them-f4ad31fb2282)
+					* [Du typage en Javascript ?!](https://www.typescriptlang.org/docs/handbook/react.html)
 				</section>					
 
 			</div>
