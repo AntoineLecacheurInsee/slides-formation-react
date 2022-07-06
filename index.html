@@ -1250,7 +1250,122 @@ describe('Tests du formulaire ', () => {
 						* toHaveBeenCalledTimes
 					</section>
 				</section>
+				
+				<section>
+					<section data-markdown="">
+						## Typescript
 					
+* Installer des dépendances rajoutant des types : 
+`npm install --save typescript @types/node @types/react @types/react-dom @types/jest`
+* Installer en dépendances de dev : 
+`npm i -D source-map-loader ts-loader`
+					</section>
+
+					<section data-markdown="">
+						## Ajout du tsconfig.json
+
+						On a besoin d'un fichier de configuration **tsconfig.json** à la racine de notre projet
+						pour préciser les règles d'utilisation de typescript.
+
+						```javascript
+						{
+							"compilerOptions": {
+							  "target": "es6",
+							  "lib": [
+								"dom",
+								"dom.iterable",
+								"esnext"
+							  ],
+							  "allowJs": true,
+							  "skipLibCheck": true,
+							  "esModuleInterop": true,
+							  "baseUrl": "src/",
+							  "allowSyntheticDefaultImports": true,
+							  "strict": true,
+							  "forceConsistentCasingInFileNames": true,
+							  "module": "esnext",
+							  "moduleResolution": "node",
+							  "resolveJsonModule": true,
+							  "isolatedModules": true,
+							  "noEmit": true,
+							  "jsx": "react",
+							},
+							"include": [
+								"src",
+								"./jest-setup.ts"
+							  ],
+							"exclude": [
+							  "./node_modules/**/*"
+							]
+						  }
+						```
+					</section>
+
+					<section data-markdown="">
+						## Passer de Javascript à Typescript
+						[Un bon exemple de conversion pas à pas](https://github.com/Microsoft/TypeScript-React-Conversion-Guide#typescript-react-conversion-guide)
+
+						Pour passer un fichier Javascript en Typescript, on commence par le renommer en changeant son extension :
+
+						* **Input.js** devient **Input.tsx** (ou **.ts** éventuellement)
+						* Puis on va devoir déclarer le type d'un certain nombre de variables dans le composant
+					</section>
+
+					<section>
+						On démarre avec le composant <b>Input.js</b> :
+
+						<pre><code data-trim=""><script type="text/template">
+						export default function Input({ id, label, value, setValue }) {
+							return (
+							  <>
+								<label htmlFor={id}>{label}</label>
+								<input
+								  id={id}
+								  type="text"
+								  value={value}
+								  onChange={(e) => setValue(e.target.value)}
+								/>
+							  </>
+							);
+						  }
+						  
+						</script></code></pre>
+					</section>
+
+					<section>
+						
+						Il suffit de le changer en <b>Input.tsx</b> et de déclarer un type <b>Props</b> pour les props qu'il reçoit :
+
+						<pre><code data-trim=""><script type="text/template">
+						interface Props {
+							id?: string; // Si on met un "?" après le nom de la propriété, alors elle est optionnelle
+							label: string;
+							value: any;
+							// Le type de setValue nous vient de la définition du useState de React
+							setValue: Dispatch<SetStateAction<any>>;
+						  }
+
+						// Pour déclarer le type d'une variable, on utilise la syntaxe suivante :
+						// variable : Type
+						export default function Input({ id, label, value, setValue }: Props) {
+							return (
+							  <>
+								<label htmlFor={id}>{label}</label>
+								<input
+								  id={id}
+								  type="text"
+								  value={value}
+								  onChange={(e) => setValue(e.target.value)}
+								/>
+							  </>
+							);
+						  }
+						  
+						</script></code></pre>
+					</section>
+
+				</section>
+
 				<section data-markdown="">
 					## Création de livrable
 					* commande : `npm run build`
