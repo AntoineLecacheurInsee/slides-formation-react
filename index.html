@@ -99,6 +99,8 @@
 							### Eléments de JavaScript ES6
 
 							[**Lien vers une console JS compatible ES6 en ligne**](https://es6console.com/)
+							
+							[**Lien vers la documentation MDN pour Javascript**](https://developer.mozilla.org/fr/docs/Web/JavaScript)
 
 							**Arrow function :**
 ```javascript
@@ -108,7 +110,7 @@ const maFonction = arg => {
 }							
 
 // Avec plusieurs arguments :
-const maAutreFonction = (arg0 = "Bonjour", arg1) => {
+const maAutreFonction = (arg0, arg1 = "Bonjour") => {
 	console.log(arg0 + " " + arg1)
 	return `Saisie : ${arg0}, ${arg1}`
 }					
@@ -187,7 +189,7 @@ tableau4 = monTableau.slice(1);
 						<pre>
 							<code data-trim data-noescape>
 								const monObjet = {a: 1, b: 2};
-								// mis à plat de monObjet et l'affecter à l'objet2 (clonage de monObjet)
+								// mise à plat de monObjet et l'affecter à l'objet2 (clonage de monObjet)
 								const objet2 = {...monObjet}; 
 								
 								const monTableau = [1, 2, 3];
@@ -397,7 +399,7 @@ const MonComposant = () => {
 							* il existe une autre façon d'écrire les composants : les classes
 							* https://reactjs.org/docs/hooks-faq.html#should-i-use-hooks-classes-or-a-mix-of-both
 							* une classe se transforme facilement en hooks
-						* list et keys				
+						* list et keys : renseigner un attribut key avec un identifiant unique lorsque vous affichez une liste d'éléments				
 					</section>
 				</section>
 
