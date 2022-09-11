@@ -300,8 +300,8 @@ const MonComposant = () => {
 	
 	return <div>      
 		{/* Mise à jour de nom avec le setter */}						
-		<label>
-			Nom : <input type="text" onChange= { e => setNom(e.target.value)} /> 
+		<label htmlFor="input-nom">
+			Nom : <input id="input-nom" type="text" onChange= { e => setNom(e.target.value)} /> 
 		</label>
 		<div>{nom}</div>      
 	</div>
@@ -370,8 +370,8 @@ const MonComposant = () => {
 						<pre><code data-trim=""><script type="text/template">
 							const [etat, setEtat] =  useState('');
 							...
-							<label>
-								Etat de l'application <select value={etat} onChange={e => setEtat(e.target.value)}>
+							<label htmlFor="select-etat">
+								Etat de l'application <select id="select-etat" value={etat} onChange={e => setEtat(e.target.value)}>
 										<option value="ACTIVE">Active</option>
 										<option value="OBSOLETE">Obsolète</option>
 									</select>
@@ -393,6 +393,22 @@ const MonComposant = () => {
 						* dans App on a un compteur du nombre de fois qu'on a cliqué sur le bouton Enregistrer
 						* on souhaite afficher et modifier ce comptage dans le formulaire
 					</section>
+
+					<section data-markdown>
+						## La logique composants
+
+						* Essayer de découper le plus possible les composants de l'application pour réutilisation et factorisation
+						* Si possible 
+					</section>
+
+					<section data-markdown>
+						## Exercice
+						Appliquer ce principe au composant formulaire
+						* Créer un composant Input qui aura pour props **id**, **label**, **value** et **setValue** a minima
+						* Créer un composant Select avec les mêmes props, ainsi que la props **children**
+						* Se servir de ces composants pour la gestion des Input et Select
+					</section>
+
 					<section data-markdown="">
 						## Divers
 						* Class vs composant fonctionnel (et hooks) :
@@ -1238,7 +1254,7 @@ describe('Tests du formulaire ', () => {
 						* npm test -- nomFichier.test.js
 					</section>
 					<section data-markdown="">
-						Sélection d'éléments :
+						[Sélection d'éléments :](https://testing-library.com/docs/react-testing-library/cheatsheet)
 						* getByText
 						* getByDisplayValue 
 						* findBy : élément résultat d'un appel ajax
