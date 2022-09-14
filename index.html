@@ -670,190 +670,14 @@ const MonComposant = () => {
 						</p>
 					</section>
 					<section data-markdown>
-						## Composants de Redux (1/2)
+						## Composants de Redux
 						* **store** : objet contenant les données accessibles à tous les composants et quelques méthodes
 						* **action** : message pouvant modifier le store. Contient les données à mettre dans le store (payload)
 						* **reducer** : fonction prenant le store et une action en entrée et retourne un store modifié 
 					</section>
-
-					<section data-markdown>
-						## Composants de Redux (2/2)
-						* **mapStateToProps** : fonction définie par l'utilisateur pour injecter les données du store dans un composant
-						* **mapDispatchToProps** : fonction définie par l'utilisateur pour modifier les données du store par un composant
-						* **connect** : fonction qui connecte **mapStateToProps** et/ou **mapDispatchToProps** à un composant
-					</section>
 					
 					<section>
 						<img data-src="img/redux-state-update.png"/>
-					</section>
-					
-					<section>
-						<h2>Mise en place</h2>
-						<pre>
-							<code data-trim="">
-							npm install redux react-redux @reduxjs/toolkit
-							</code>
-						</pre>
-					</section>
-					<section>
-						<p data-markdown>						
-						## Exemple
-						On souhaite mettre dans le store le nombre de fois qu'on a cliqué sur "Enregistrer" dans un formulaire. 
-						Ce compteur sera réaffiché dans le composant Tableau.
-						1. créer l'action dans un fichier nommé actions.js
-						</p>
-						<pre><code data-trim="">
-export const MODIFIER_COMPTEUR = "MODIFIER_COMPTEUR"
-export const modifierCompteur = payload => ({type : MODIFIER_COMPTEUR, payload })
-						</code></pre>
-					</section>
-					<section>
-						<p  data-markdown="">
-							2. créer le reducer dans un fichier nommé reducer.js
-						</p>
-						<pre><code data-trim="">
-	export const applicationReducer = (state = 0, action) => {
-		if(action.type === MODIFIER_COMPTEUR) {
-			return state + action.payload
-		}
-		return state;
-	}
-						</code></pre>
-					</section>
-
-					<section>
-						<p data-markdown="">
-							3. connecter le reducer au store  
-							Dans index.js
-						</p>
-						<pre><code><script type="text/template">
-// Ajouter ces imports en plus
-import {createStore} from 'redux'
-import {Provider} from 'react-redux'
-import { applicationReducer } from './component/reducer'
-const store = createStore(applicationReducer)
-
-ReactDOM.render(
-<React.StrictMode>
-	<Provider store={store}>
-		<HashRouter>
-			<App />
-		</HashRouter>
-	</Provider>
-</React.StrictMode>,
-document.getElementById('root')
-)
-					</script></code></pre>
-					</section>
-					<section>
-						<p data-markdown="">
-							4. permettre au composant Formulaire de modifier le store(mapDispatchToProps)  
-							Créer un fichier FormulaireContainer.js
-						</p>
-						<pre><code>
-
-import { connect } from 'react-redux'
-import { modifierCompteur } from "./action"
-import Formulaire from './Formulaire'
-
-const mapDispatchToProps = dispatch => ({
-	ajouter : valeur => dispatch(modifierCompteur(valeur)) 
-})
-
-export default connect(null, mapDispatchToProps)(Formulaire)
-
-						</code></pre>
-						</section>
-						<section>
-						Utiliser ce composant connecté dans App.js
-						<pre><code><script type="text/template">
-import FormulaireContainer from './component/application/FormulaireContainer'
-.....
-<Route path="/formulaire" element={<FormulaireContainer/>}/>
-						</script></code></pre>
-
-					</section>
-
-					<section>
-						<p data-markdown>5. Modifier Formulaire pour pouvoir appeler la fonction injectée.  Dans Formulaire</p>
-						<pre><code>
-// On utilise la fonction injectée :
-const Formulaire = ({ajouter}) => { .... 
-// Dans la méthode qui enregistre :
-ajouter(1)
-						</code></pre>
-					</section>
-
-					<section>
-						<p data-markdown> 6. Afficher le state dans le composant Tableau (mapStateToProps)  </p>
-Créer un TableauContainer.js
-<pre><code><script type="text/template">
-import { connect } from 'react-redux'
-import Tableau from './Tableau'
-const mapStateToProps = state => ({ compteur : state})
-export default connect(mapStateToProps)(Tableau)
-</script></code></pre>
-Et utiliser ce composant connecté à la place de Tableau
-<pre><code><script type="text/template">
-import TableauContainer from './component/application/TableauContainer'
-<Route path="/tableau" element={<TableauContainer/>}/>
-</script></code></pre>
-					</section>
-					<section>
-Enfin modifier Tableau pour prendre en compte le compteur injecté
-<pre><code><script type="text/template">
-const Tableau = ({compteur}) => {	
-	....
-<div>Il y a eu {compteur} enregistrements</div>
-</script></code></pre>
-					</section>
-
-					<section>
-						<p data-markdown="">
-							On souhaite donner une structure d'objet au state
-							1. Modifier le fichier reducer.js 				
-						</p>
-						<pre><code data-trim=""><script type="text/template">
-						export const applicationReducer = (state = {compteur : 0}, action) => {
-							if(action.type === MODIFIER_COMPTEUR) {
-								return {
-									...state, // les autres champs du state sont renvoyés inchangés
-									compteur : action.payload // on modifie le champ nommé 'compteur' de state
-								}
-							}
-							return state;
-						}							
-						</script></code></pre>
-					</section>
-
-					<section>
-						2. Modifier le fichier TableauContainer.js
-						<pre><code data-trim=""><script type="text/template">
-						import { connect } from 'react-redux'
-						import Tableau from './Tableau'
-						// on prend state.compteur pour injecter dans le Tableau
-						const mapStateToProps = state => ({ compteur : state.compteur})
-						export default connect(mapStateToProps)(Tableau)
-						</script></code></pre>						
-					</section>
-
-					<section >
-						<p data-markdown="">
-		## Exercice
-		* installer le plugin Redux DevTools pour visualiser le store :
-			* le plugin Firefox : Redux DevTools
-			* dans index.js :
-						</p>
-						<pre><code data-trim=""><script type="text/template">
-import { compose, createStore } from 'redux';
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-const store = createStore(applicationReducer, composeEnhancers())
-
-						</script></code></pre>
-		<p data-markdown="">
-		* mettre dans le store le nom de la dernière application que vous avez enregistrée
-		* réafficher ce nom dans un composant de votre choix			
-		</p>
 					</section>
 
 					<section data-markdown="">
@@ -867,6 +691,8 @@ npm install react-redux @reduxjs/toolkit
 
 					<section data-markdown="">
 						### Création d'une **Slice** = actions + reducer
+						1. Création du fichier counterSlice.js
+
 ```javascript
 import { createSlice } from '@reduxjs/toolkit'
 
@@ -902,22 +728,28 @@ export default counterSlice.reducer
 					<section data-markdown="">
 					### Ajout au store
 
+					2. Création du fichier store.js
+
 ```javascript
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from "./counterSlice";
 
-export default configureStore({
+const store = configureStore({
   reducer: {
 	// Nom de la slice utilisé pour accéder à cette partie du state dans le store
     counter: counterReducer
   }
 });
+
+export default store;
 ```					
 
 					</section>
 
 					<section>
 						<p data-markdown="">### Ajout du store dans l'application</p>
+
+						<p data-markdown="">3. Dans index.js ajouter le composant Provider et sa prop store</p>
 	
 						<pre><code data-trim=""><script type="text/template">
 import store from './redux/store';
@@ -941,8 +773,11 @@ root.render(
 					<section>
 						<p data-markdown="">
 						### Utilisation des actions dans un composant _Counter_
-					</p>
-	
+						</p>
+						<p data-markdown="">
+							Dans un fichier Counter.js créer le composant Counter et créer une route **"compteur"** qui affiche le composant	
+						</p>
+
 					<pre><code data-trim=""><script type="text/template">
 						import React, { useState } from 'react'
 						import { useSelector, useDispatch } from 'react-redux'
@@ -993,6 +828,191 @@ root.render(
 </script></code></pre>	
 	
 						</section>
+
+						<section data-markdown>
+							## Conclusion
+							* C'est tout pour l'implémentation _moderne_
+							* Les slides plus bas donnent le déroulé à suivre pour mettre en place redux avec son ancienne implémentation
+						</section>
+
+						<section data-markdown>
+							## Composants de Redux _ancienne implémentation_ (2/2)
+							* **mapStateToProps** : fonction définie par l'utilisateur pour injecter les données du store dans un composant
+							* **mapDispatchToProps** : fonction définie par l'utilisateur pour modifier les données du store par un composant
+							* **connect** : fonction qui connecte **mapStateToProps** et/ou **mapDispatchToProps** à un composant
+						</section>
+						
+						<section>
+							<h2>Mise en place</h2>
+							<pre>
+								<code data-trim="">
+								npm install redux react-redux @reduxjs/toolkit
+								</code>
+							</pre>
+						</section>
+						<section>
+							<p data-markdown>						
+						## Exemple
+						On souhaite mettre dans le store le nombre de fois qu'on a cliqué sur "Enregistrer" dans un formulaire. 
+
+						Ce compteur sera réaffiché dans le composant Tableau.
+						
+						1. créer l'action dans un fichier nommé actions.js
+							</p>
+							<pre><code data-trim="">
+	export const MODIFIER_COMPTEUR = "MODIFIER_COMPTEUR"
+	export const modifierCompteur = payload => ({type : MODIFIER_COMPTEUR, payload })
+							</code></pre>
+						</section>
+						<section>
+							<p  data-markdown="">
+								2. créer le reducer dans un fichier nommé reducer.js
+							</p>
+							<pre><code data-trim="">
+		export const applicationReducer = (state = 0, action) => {
+			if(action.type === MODIFIER_COMPTEUR) {
+				return state + action.payload
+			}
+			return state;
+		}
+							</code></pre>
+						</section>
+	
+						<section>
+							<p data-markdown="">
+								3. connecter le reducer au store  
+								Dans index.js
+							</p>
+							<pre><code><script type="text/template">
+	// Ajouter ces imports en plus
+	import {createStore} from 'redux'
+	import {Provider} from 'react-redux'
+	import { applicationReducer } from './component/reducer'
+	const store = createStore(applicationReducer)
+	
+	ReactDOM.render(
+	<React.StrictMode>
+		<Provider store={store}>
+			<HashRouter>
+				<App />
+			</HashRouter>
+		</Provider>
+	</React.StrictMode>,
+	document.getElementById('root')
+	)
+						</script></code></pre>
+						</section>
+						<section>
+							<p data-markdown="">
+								4. permettre au composant Formulaire de modifier le store(mapDispatchToProps)  
+								Créer un fichier FormulaireContainer.js
+							</p>
+							<pre><code>
+	
+	import { connect } from 'react-redux'
+	import { modifierCompteur } from "./action"
+	import Formulaire from './Formulaire'
+	
+	const mapDispatchToProps = dispatch => ({
+		ajouter : valeur => dispatch(modifierCompteur(valeur)) 
+	})
+	
+	export default connect(null, mapDispatchToProps)(Formulaire)
+	
+							</code></pre>
+							</section>
+							<section>
+							Utiliser ce composant connecté dans App.js
+							<pre><code><script type="text/template">
+	import FormulaireContainer from './component/application/FormulaireContainer'
+	.....
+	<Route path="/formulaire" element={<FormulaireContainer/>}/>
+							</script></code></pre>
+	
+						</section>
+	
+						<section>
+							<p data-markdown>5. Modifier Formulaire pour pouvoir appeler la fonction injectée.  Dans Formulaire</p>
+							<pre><code>
+	// On utilise la fonction injectée :
+	const Formulaire = ({ajouter}) => { .... 
+	// Dans la méthode qui enregistre :
+	ajouter(1)
+							</code></pre>
+						</section>
+	
+						<section>
+							<p data-markdown> 6. Afficher le state dans le composant Tableau (mapStateToProps)  </p>
+	Créer un TableauContainer.js
+	<pre><code><script type="text/template">
+	import { connect } from 'react-redux'
+	import Tableau from './Tableau'
+	const mapStateToProps = state => ({ compteur : state})
+	export default connect(mapStateToProps)(Tableau)
+	</script></code></pre>
+	Et utiliser ce composant connecté à la place de Tableau
+	<pre><code><script type="text/template">
+	import TableauContainer from './component/application/TableauContainer'
+	<Route path="/tableau" element={<TableauContainer/>}/>
+	</script></code></pre>
+						</section>
+						<section>
+	Enfin modifier Tableau pour prendre en compte le compteur injecté
+	<pre><code><script type="text/template">
+	const Tableau = ({compteur}) => {	
+		....
+	<div>Il y a eu {compteur} enregistrements</div>
+	</script></code></pre>
+						</section>
+	
+						<section>
+							<p data-markdown="">
+								On souhaite donner une structure d'objet au state
+								1. Modifier le fichier reducer.js 				
+							</p>
+							<pre><code data-trim=""><script type="text/template">
+							export const applicationReducer = (state = {compteur : 0}, action) => {
+								if(action.type === MODIFIER_COMPTEUR) {
+									return {
+										...state, // les autres champs du state sont renvoyés inchangés
+										compteur : action.payload // on modifie le champ nommé 'compteur' de state
+									}
+								}
+								return state;
+							}							
+							</script></code></pre>
+						</section>
+	
+						<section>
+							2. Modifier le fichier TableauContainer.js
+							<pre><code data-trim=""><script type="text/template">
+							import { connect } from 'react-redux'
+							import Tableau from './Tableau'
+							// on prend state.compteur pour injecter dans le Tableau
+							const mapStateToProps = state => ({ compteur : state.compteur})
+							export default connect(mapStateToProps)(Tableau)
+							</script></code></pre>						
+						</section>
+	
+						<section >
+							<p data-markdown="">
+			## Exercice
+			* installer le plugin Redux DevTools pour visualiser le store :
+				* le plugin Firefox : Redux DevTools
+				* dans index.js :
+							</p>
+							<pre><code data-trim=""><script type="text/template">
+	import { compose, createStore } from 'redux';
+	const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+	const store = createStore(applicationReducer, composeEnhancers())
+	
+							</script></code></pre>
+			<p data-markdown="">
+			* mettre dans le store le nom de la dernière application que vous avez enregistrée
+			* réafficher ce nom dans un composant de votre choix			
+			</p>
+						</section>
+	
 
 				</section>
 
@@ -1171,10 +1191,10 @@ validationSchema={validationSchema}
 
 					<section data-markdown="">
 						## Exercice
-						* utiliser formik dans le formulaire de saisie d'une application
-						* rendre obligatoire l'état
-						* le nom doit avoir une longueur minimale de 2 et être obligatoirement renseigné
-						* afficher un message en cas d'erreur de non respect de la saisie
+						* Utiliser formik dans le formulaire de saisie d'une application
+						* Rendre obligatoire l'état
+						* Le nom doit avoir une longueur minimale de 2 et être obligatoirement renseigné
+						* Afficher un message en cas d'erreur de non respect de la saisie
 						* Suggestions :
 							* placer l'appel ajax qui enregistre dans le onSubmit
 							* utiliser un validateSchema pour valider
@@ -1270,6 +1290,12 @@ describe('Tests du formulaire ', () => {
 						* toHaveBeenCalledWith
 						* toHaveBeenCalledTimes
 					</section>
+
+					<section data-markdown="">
+						## Exercice
+						* Définir des tests de votre choix pour vos composants Input et Select
+					</section>
+
 					<section data-markdown="">
 						### Pour aller plus loin
 
