@@ -50,21 +50,15 @@
 						## Outils pour le développement (2/2)
 						* Node.js : environnement d'exécution JavaScript. Utilisé pour lancer en local un serveur Web, 
 						parser et déployer le code JS
-							* https://nodejs.org/dist/v16.15.1/node-v16.15.1-win-x64.zip
+							* https://nodejs.org/dist/v18.15.0/node-v18.15.0-win-x64.zip
 						* **npm** : gestionnaire de packages JavaScript. Inclus avec l'installation de Node.js
 						* Firefox ou Chrome : installer les extensions React Developer Tools et Redux DevTools
 					</section>
 					<section data-markdown>
 						## Dépôts et backend
-						* le code source du backend est diponible ici : https://github.com/AntoineLecacheurInsee/formation-react-back.git
-						* Si vous n'avez pas d'installation Java, vous pourrez utiliser l'application déployée sur le cluster Kubernetes
-						* importer dans Eclipse / IntelliJ
-						* ouvrir le fichier application.properties sous ressources
-						* changer le schéma comme indiqué
-						* lancer l'application : clic droit sur FormationReactBackApplication puis
-							* Runas -> Java Application
-							* ou bien Runas -> Spring Boot App 
-							* ou bien le lancer dans le Boot Dashboard
+						* le code source du backend est diponible ici : https://gitlab.insee.fr/formation-react/formation-react-api
+						* Vous pourrez **utiliser l'application déployée sur le cluster Kubernetes**
+						* [Lien du swagger](https://formation-react-api.dev.kube.insee.fr/swagger-ui/index.html)
 						</section>
 						<section data-markdown>
 							## Initialiser une application React
@@ -428,7 +422,7 @@ const MonComposant = () => {
 					</section>
 					<section data-markdown>
 						## API du back-end
-						* Vous pouvez utiliser http://localhost:8080 ou http://formation-react-api.kube.developpement.insee.fr comme BASE_URL
+						* Vous pouvez utiliser https://formation-react-api.dev.kube.insee.fr comme BASE_URL (http://localhost:8080 si vous lancez votre webservice en local)
 						* POST {BASE_URL}/applications avec comme body {nom: .., version : ..., etat: ...}. 
 						Si il existe une application de même nom elle est mise à jour.
 						* GET {BASE_URL}/applications ou liste de toutes les applications
@@ -440,7 +434,7 @@ const MonComposant = () => {
 							<code>
 		const headers = new Headers();
 		headers.append("Content-Type" , "application/json")
-		fetch("http://localhost:8080/applications",
+		fetch("https://formation-react-api.dev.kube.insee.fr/applications",
 			{
 				method: 'POST',
 				headers: headers,
@@ -481,7 +475,7 @@ const MonComposant = () => {
 									useEffect(()=> {
 										const headers = new Headers();
 										headers.append("Content-Type" , "application/json")
-										fetch("http://localhost:8080/applications", {headers: headers})
+										fetch("https://formation-react-api.dev.kube.insee.fr/applications", {headers: headers})
 										.then(reponse => reponse.json())
 										.then(reponse => setData(reponse))
 										.catch(e => console.log(e))
@@ -535,7 +529,7 @@ const MonComposant = () => {
 						* supprimer l'application correspondante
 						* recharger le tableau 
 					* suggestions :
-						* pour supprimer utiliser un fetch avec DELETE comme méthode sur l'URL http://localhost:8080/applications/id
+						* pour supprimer utiliser un fetch avec DELETE comme méthode sur l'URL https://formation-react-api.dev.kube.insee.fr/applications/id
 						* chaîner le rechargement des données en cas de succès du fetch
 					</section>
 				</section>
@@ -1256,7 +1250,7 @@ describe('Tests du formulaire ', () => {
 		headers.append("Content-Type", "application/json");
 		// On s'attend à ce que notre fonction fetch mockée ait été appelée sur l'url indiquée,
 		// avec la méthode "POST", le headers et le body précisés
-		expect(fetchMock).toHaveBeenCalledWith('http://localhost:8080/applications',
+		expect(fetchMock).toHaveBeenCalledWith('https://formation-react-api.dev.kube.insee.fr/applications',
 			{ method: "POST", headers, body: JSON.stringify(application) })
 	})
 })
