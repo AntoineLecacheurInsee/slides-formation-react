@@ -417,8 +417,8 @@ const MonComposant = () => {
 
 				<section>
 					<section data-markdown>
-						## Exercice
-						Créer un formulaire pour saisir la description d'une application
+						## Exercice 4 - Formulaire
+						Créer un composant **Formulaire** pour saisir la description d'une application
 						* un champ input de type texte pour saisir le nom de l'application (balise input)
 						* un champ input de type texte pour saisir la version de l'application (balise input)
 						* un menu déroulant (balise select) pour choisir l'état de l'application. Deux valeurs possibles : **ACTIVE** et **OBSOLETE**
@@ -426,7 +426,7 @@ const MonComposant = () => {
 						* le composant renvoie une balise form contenant ces balises de saisie
 					</section>
 					<section>
-						Suggestions
+						<h2>Suggestions champ select</h2>
 						<pre><code data-trim=""><script type="text/template">
 							const [etat, setEtat] =  useState('');
 							...
@@ -440,6 +440,13 @@ const MonComposant = () => {
 							<button type="button" onClick={e => console.log(`${nom} ${version} ${etat}`  )}>Enregistrer</button>
 						</script></code></pre>
 					</section>
+					<section data-markdown="">
+						## Exercice 4 - Correction
+
+						```git
+						git checkout exercice4-formulaire
+						```
+					</section>		
 				</section>
 
 				<section>
@@ -448,25 +455,50 @@ const MonComposant = () => {
 						* un composant transmet les données à un composant enfant via les props de celui-ci
 						* pour modifier l'état du parent par l'enfant, on doit passer un "setter" défini dans le parent à l'enfant pour qu'il l'exécute
 					</section>
-					<section data-markdown>
-						Exemple :
-						* dans App on a un compteur du nombre de fois qu'on a cliqué sur le bouton Enregistrer
-						* on souhaite afficher et modifier ce comptage dans le formulaire
+					<section>
+						<h5>Exercice 5 - Formulaire et compteur : flux entre composants</h5>
+						<ul>
+							<li>
+								Ajouter une variable de compteur qui s'incrémente à chaque fois qu'on clique sur le bouton d'enregistrement du formulaire
+							</li>
+							<li>
+								Afficher ce comptage dans le <b>Formulaire</b> et dans le <b>Header</b>
+							</li>
+						</ul>
+
+						<details>
+							<summary><b>Indices (cliquer pour afficher)</b></summary>
+							<ul>
+								<li>déclarer la variable compteur dans <b>App</b></li>
+								<li>modifier le composant <b>Header</b> pour lui passer une props <b>compteur</b></li>
+							</ul>
+							
+						</details>
+						
+						
+						<h6>Correction</h6>
+						<pre><code>
+							git checkout exercice5-form-cpt
+						</code></pre>
 					</section>
 
 					<section data-markdown>
 						## La logique composants
 
 						* Essayer de découper le plus possible les composants de l'application pour réutilisation et factorisation
-						* Si possible 
 					</section>
 
 					<section data-markdown>
-						## Exercice
+						### Exercice 6 - Découpage Input et Select
 						Appliquer ce principe au composant formulaire
 						* Créer un composant Input qui aura pour props **id**, **label**, **value** et **setValue** a minima
-						* Créer un composant Select avec les mêmes props, ainsi que la props **children**
-						* Se servir de ces composants pour la gestion des Input et Select
+						* Créer un composant Select avec les mêmes props, ainsi que la props **children** ou bien **listeOptions**
+						* Se servir de ces composants pour la gestion des input et select du formulaire
+
+						#### Correction
+						```git
+						git checkout exercice6-decoupage
+						```
 					</section>
 
 					<section data-markdown="">
@@ -492,7 +524,7 @@ const MonComposant = () => {
 						* DELETE {BASE_URL}/applications/id id qui est l'identifiant de l'application
 					</section>
 					<section data-markdown>
-						## Fetch
+						## Exercice 7 - WS Post avec Fetch
 						<pre>
 							<code>
 		const headers = new Headers();
@@ -508,6 +540,11 @@ const MonComposant = () => {
 							</code>
 						</pre>
 						Utliser ce code dans la méthode "enregistrer" du formulaire
+
+						##### Correction
+						```git
+						git checkout exercice7-ws-post
+						```
 					</section>
 					<section data-markdown="">
 						### Syntaxe de fetch
@@ -528,7 +565,7 @@ const MonComposant = () => {
 								* [var1, var2] : si var1 ou var2, qui peuvent être des props ou state, changent alors le callback est réexécuté
 					</section>
 					<section>
-						Un composant qui est un tableau de toutes les applications
+						<h4>Exemple : Un composant <b>Tableau</b> listant les applications</h4>
 						<pre>
 							<code data-trim="">
 								<script type="text/template">
@@ -566,34 +603,33 @@ const MonComposant = () => {
 						</pre>
 
 					</section>
-					<section>
-						<p data-markdown>
-						## Exercice
-						* faire le corps du tableau 
-						* vous pouvez appliquer la méthode map à data 
-						* utiliser ce tableau dans App.js
-						</p>						
-<pre>
-	<code>
-		<script type="text/template">
-		// dans le body du tableau
-		data.map(appli => <tr> <td> {appli etc...}</td></tr>)
-
-		// puis dans App :
-		import Tableau from ... ; ... <Tableau/>
-		</script>
-	</code>
-</pre>							
+					<section data-markdown="">
+						## Exercice 8 - Tableau
+						* Créer ce composant et compléter pour ajouter le corps du tableau 
+						* Vous pouvez appliquer la méthode map 
+						* Afficher ce tableau dans **App** en dessous du formulaire
+						
+						#### Correction
+						```git
+						git checkout exercice8-tableau
+						```
 					</section>
 					<section data-markdown>
-					## Exercice	
+					## Exercice	9 - Delete
 					* pour chaque ligne ajouter une dernière colonne contenant un bouton "Supprimer"
 					* lorsqu'on clique sur ce bouton :
 						* supprimer l'application correspondante
 						* recharger le tableau 
-					* suggestions :
+					* Suggestions :
 						* pour supprimer utiliser un fetch avec DELETE comme méthode sur l'URL https://formation-react-api.dev.kube.insee.fr/applications/id
 						* chaîner le rechargement des données en cas de succès du fetch
+					</section>
+
+					<section data-markdown="">
+						## Exercice 9 - Correction
+						```git
+						git checkout exercice9-delete
+						```
 					</section>
 				</section>
 
