@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>Formation React Redux 2022</title>
+		<title>Formation React Redux 2023</title>
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
@@ -62,18 +62,18 @@
 						</section>
 						<section data-markdown>
 							## Initialiser une application React
-							* dépôt des bouts de code https://github.com/AntoineLecacheurInsee/formation-react-exo
-
-							Exécuter dans la console VS Code :
-
-						<pre>
-							<code data-trim data-noescape>
-								// Déclarer le registre npm
-								npm config set registry http://registry.npmjs.org/
-								npx create-react-app suivi-applications
-							</code>
-						</pre>
-
+							* [Dépôt de code pour la formation avec correction d'exercices](https://gitlab.insee.fr/formation-react/formation-react-exo)
+							* Pour gagner du temps, on part du dépôt de code d'exos. Se placer dans un répertoire de formation et avec git bash 
+							```bash
+							git clone git@gitlab.insee.fr:formation-react/formation-react-exo.git
+							```
+							
+							Sinon, il suffirait d'exécuter la commande suivante pour initialiser un projet react pré-configuré :
+							```bash
+							npx create-react-app formation-react-exo
+							```
+						</section>
+					<section data-markdown>
 							Ce code va créer une arborescence de dossiers et des fichiers :
 							* le dossier **src** : dossier qui va contenir le code source JavaScript
 							* le fichier **package.json** :
@@ -82,24 +82,29 @@
 					</section>
 					<section data-markdown>
 						## Lancement de l'application						
-						Exécuter dans la console VS Code :
-						<pre>
-							<code data-trim data-noescape>
-							cd suivi-applications
-							npm start
-							</code>
-						</pre>
+						Exécuter dans votre terminal :
+						```bash
+						cd  formation-react-exo
+						npm start
+						```
+
 						Examen des fichiers **src/App.js**, **src/index.js** et **public/index.html**
 					</section>
 					<section data-markdown>
 						<textarea data-template>
 							### Eléments de JavaScript ES6
 
-							[**Lien vers une console JS compatible ES6 en ligne**](https://es6console.com/)
-							
 							[**Lien vers la documentation MDN pour Javascript**](https://developer.mozilla.org/fr/docs/Web/JavaScript)
+							* Sous **src/ES6** des classes de test pour montrer des exemples d'utilisation
+							* Pour lancer les tests d'une classe : 
+							```bash
+							npm run test src/ES6/ArrowFunctions.test.js
+							```
+						</textarea>
 
-							**Arrow function :**
+					</section>
+					<section data-markdown>
+						### Arrow function
 ```javascript
 const maFonction = arg => {
 	console.log(arg)
@@ -112,9 +117,7 @@ const maAutreFonction = (arg0, arg1 = "Bonjour") => {
 	return `Saisie : ${arg0}, ${arg1}`
 }					
 ```		
-						</textarea>
-
-					</section>
+					</section>	
 					<section data-markdown>
 						<textarea data-template>
 						###	Objet et décomposition (destructuring)  :
@@ -203,10 +206,34 @@ tableau4 = monTableau.slice(1);
 					</section>
 
 					<section data-markdown>
-						## Modules, import et export
-						* modules : ensemble de programmes JavaScript
-						* import : réutiliser un élément d'un module
-						* export : mettre mon composant à disposition des autres composants ou programmes JavaScript
+						## Import et export
+						* **export :** mettre mon composant à disposition des autres composants ou programmes JavaScript
+							* export par défaut **export default monObjetAExporter** : max 1 par fichier
+							* export nommé **export monObjetAExporter**
+						* **import :** réutiliser un élément d'un module
+							* import "par défaut", on peut appeler l'objet comme on veut **import toto from "./fichierExport"
+							* import "nommé", on doit importer avec le même nom que l'export, et entre accolade **import { monObjetAImporter } from "./fichier"**
+					</section>
+
+					<section data-markdown>
+						## Exercice
+						* Déplacer les fonctions fléchées dans un autre fichier pour les exporter
+						* Les importer dans le fichier de test
+						* Manipuler les exports / imports par défaut et nommés
+					</section>
+
+					<section data-markdown>
+						## Correction
+						* Tout au long de la formation, la correction des exos se trouve sur une branche GIT dédiée
+						* Si vous voulez conserver vos changements, avant de changer de branche, à la racine du projet react :
+						```git
+						git add .
+						git commit -m "Votre message de commit"
+						```
+						* Pour avoir la correction, se placer sur la branche **import-export**
+						```git
+						git checkout import-export
+						```
 					</section>
 				</section>
 
@@ -252,6 +279,22 @@ export default MonComposant;
 ```
 						</textarea>
 					</section>
+					<section>
+						<h2>Utilisation d'un composant</h2>
+						Supposons qu'on a défini un composant <b>MonComposant</b> dans un fichier <b>MonComposant.js</b>
+
+						<pre><code data-trim=""><script type="text/template">
+						import React, { useState } from 'react' 
+						import MonComposant from './MonComposant';
+									
+						const App = () =>  {
+							return <div className="App">      
+								Gestion des applications
+								<MonComposant/>
+							</div>
+						}								
+						</script></code></pre>
+					</section>
 					<section >
 						<p data-markdown>
 						## Props
@@ -269,12 +312,27 @@ export default MonComposant;
 							<MonComposant nom="Toto"/>
 						</script></code></pre>
 					</section>
+					<section data-markdown>
+						## Exercice 1 - Props
+						* Ajouter une balise **footer** avec le contenu de votre choix dans **App.js**
+						* Créer un composant **Footer** qui va afficher cette balise
+						* Ajouter la props **footerText** pour passer le contenu du footer
+						* Déplacer le composant **Footer** dans un fichier **Footer.js**, gérer les imports et exports
 
+						### Correction
+						```git
+						git checkout exercice1-props
+						```
+					</section>
 					<section>
 						<p data-markdown>
 						## State
 						* état local du composant
 						* initialisé avec **useState** : const [monEtat, setMonEtat] = useState('Valeur initiale')
+						* il faut importer cette fonction de React 
+						```javascript
+						import { useState } from "react";
+						```
 						* la mise à jour doit être faite avec le setMonEtat fourni par useState : 
 						</p>
 						<pre><code data-trim="">
@@ -286,7 +344,8 @@ export default MonComposant;
 						</code></pre>
 					</section>
 
-					<section>						
+					<section>	
+						<h2>Exemple useState avec une input</h2>					
 						<pre><code>
 							<script type="text/template">
 import React, { useState } from 'react' 
@@ -307,7 +366,18 @@ const MonComposant = () => {
 						</code>
 						</pre>
 					</section>
+					<section data-markdown>
+						## Exercice 2 - State
+						* Créer un composant **Compteur** dans un fichier **Compteur.js**
+						* Utiliser la fonction **useState** pour stocker la valeur du compteur dans une variable JS **compteur**
+						* Afficher la valeur du compteur dans le composant, et créer des boutons pour ajouter / retirer 1 au compteur
+						* Utiliser l'évenement **onClick** des boutons, et la fonction **setCompteur** fournie par le useState
 
+						### Correction
+						```git
+						git checkout exercice2-state
+						```
+					</section>
 					<section data-markdown>
 						## Le rendu
 						Le résultat renvoyé par le composant est du JSX (JavaScript XML) :
@@ -321,20 +391,8 @@ const MonComposant = () => {
 						* **à chaque fois que le state ou les props changent, React met à jour l'affichage**
 						* l'interactivité se base sur ce fonctionnement
 					</section>
-					<section>
-						<h2>Utilisation du composant</h2>
-						<pre><code data-trim=""><script type="text/template">
-						import React, { useState } from 'react' 
-						import MonComposant from './MonComposant';
-									
-						const App = () =>  {
-							return <div className="App">      
-								Gestion des applications
-								<MonComposant/>
-							</div>
-						}								
-						</script></code></pre>
-					</section>
+					
+				
 					<section data-markdown="">
 						Les événements dans React
 						* rappels sur le DOM
@@ -344,11 +402,16 @@ const MonComposant = () => {
 						* https://reactjs.org/docs/events.html
 					</section>
 					<section data-markdown="">
-						Exemples :
-						* réutilisation d'un composant
-						* composant enfant d'un composant, lui-même enfant d'un composant
-						* state ou props changent => changement du rendu
-						* props.children
+						## Exercice 3 - Children
+
+						* **children** est une props "par défaut" pour tenir compte des enfants d'une balise
+						* Créer un composant **Header** dans lequel vous déclarez les balises **header** et affichez la props children
+						* Changer les balises **header** dans **App** par votre composant **Header**
+
+						### Correction
+						```git
+						git checkout exercice3-children
+						```
 					</section>					
 				</section>
 
